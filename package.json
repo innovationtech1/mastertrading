@@ -1,0 +1,12 @@
+{
+    "name": "mastertrading",
+    "version": "1.0.0",
+    "description": "curso de traiding online",
+    "main": "desarrollo.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Hector de Hoyos",
+    "license": "ISC"
+}
