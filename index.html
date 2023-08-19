@@ -17,7 +17,8 @@
     <header>
         <div class="logo-container">
             <img class="logo" src="./img/logo.png" alt="logo">
-            <h1 class="title">Master Trading</h1>
+            <h1 class="title">
+                <span class="span">DISCR</span> TRADING</h1>
         </div>
 
         <img class="img" src="./img/grafica.jpg" alt="Grafica">
@@ -28,7 +29,7 @@
     <br>
     <div class="text1 text1 fade-text ">Welcome all to this unique chance that can genuinely revolutionize your trading journey. Today, I'm introducing our customized 1 on 1 coaching and interactive lectures – a blend crafted to expedite your progress and secure triumph in the trading domain.
     </div>
-    <p class="text text1 fade-text">
+    <p class=" text fade-text">
         Unveil the path to your financial independence with our online trading courses! Immerse yourself in the exhilarating world of financial markets from the comfort of your own home. Our platform provides you access to in-depth knowledge and proven strategies
         that will empower you to understand how markets work and make informed decisions.
         <br>
@@ -131,12 +132,69 @@
             allowfullscreen></iframe>
     </div>
 
+
+    <div class="containerPaypal">
+
+        <!-- Replace "test" with your own sandbox Business account app client ID -->
+        <script src="https://www.paypal.com/sdk/js?client-id=AQLFa6C0oiC30Tu-zTT5QeVLB30IDgE2wp3tPrHamiOI3TBpEgHivYHbkxEbTJiP472YtEw34NJtnHGn&currency=USD"></script>
+        <!-- Set up a container element for the button -->
+        <div id="paypal-button-container"></div>
+        <script>
+            paypal.Buttons({
+                // Order is created on the server and the order id is returned
+                createOrder() {
+                    return fetch("/my-server/create-paypal-order", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            // use the "body" param to optionally pass additional order information
+                            // like product skus and quantities
+                            body: JSON.stringify({
+                                cart: [{
+                                    sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
+                                    quantity: "YOUR_PRODUCT_QUANTITY",
+                                }, ],
+                            }),
+                        })
+                        .then((response) => response.json())
+                        .then((order) => order.id);
+                },
+                // Finalize the transaction on the server after payer approval
+                onApprove(data) {
+                    return fetch("/my-server/capture-paypal-order", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                orderID: data.orderID
+                            })
+                        })
+                        .then((response) => response.json())
+                        .then((orderData) => {
+                            // Successful capture! For dev/demo purposes:
+                            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                            const transaction = orderData.purchase_units[0].payments.captures[0];
+                            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+                            // When ready to go live, remove the alert and show a success message within this page. For example:
+                            // const element = document.getElementById('paypal-button-container');
+                            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                            // Or go to another URL:  window.location.href = 'thank_you.html';
+                        });
+                }
+            }).render('#paypal-button-container');
+        </script>
+
+
+    </div>
+
     <footer class="footer ">
 
-        <h3 class="services "></h3>
+
 
         <div class="subscription-form">
-            <h1>Suscríbete al Curso de Trading</h1>
+            <h1 class="footer-title">Suscríbete al Curso de Trading</h1>
             <input type="email" id="email" placeholder="Ingresa tu correo electrónico">
             <button id="subscribe-btn">Suscribirse</button>
     </footer>
